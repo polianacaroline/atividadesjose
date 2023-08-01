@@ -39,6 +39,13 @@ public class Principal extends JFrame {
 	private JPanel contentPane;
 	private JLabel lblStatus;
 	private JLabel lblData;
+	//mudou de "private"para "public"
+	//estes componentes serao alteradas pela tela de login 
+	
+	public JLabel lblUsuario;
+	public JButton btnUsuarios;
+	public JButton btnRelatorio;
+	public JPanel panelRodape;
 
 	/**
 	 * Launch the application.
@@ -75,7 +82,7 @@ public class Principal extends JFrame {
 				}
 			});
 		
-					setBounds(100, 100, 639, 479);
+					setBounds(100, 100, 732, 479);
 		contentPane = new JPanel();
 		contentPane.setBackground(new Color(192, 192, 192));
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
@@ -84,7 +91,8 @@ public class Principal extends JFrame {
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
 		
-		JButton btnUsuarios = new JButton("");
+		btnUsuarios = new JButton("");
+		btnUsuarios.setEnabled(false);
 		btnUsuarios.setBackground(new Color(234, 240, 253));
 		btnUsuarios.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 		btnUsuarios.setToolTipText("Usuarios");
@@ -112,24 +120,36 @@ public class Principal extends JFrame {
 		btnSobre.setIcon(new ImageIcon(Principal.class.getResource("/img/4470663_description_about_app_web_info_icon.png")));
 		btnSobre.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 		btnSobre.setToolTipText("Sobre");
-		btnSobre.setBounds(572, 0, 48, 48);
+		btnSobre.setBounds(668, 0, 48, 48);
 		contentPane.add(btnSobre);
 		
-		JPanel panel = new JPanel();
-		panel.setBackground(new Color(0, 0, 160));
-		panel.setBounds(-5, 394, 635, 52);
-		contentPane.add(panel);
-		panel.setLayout(null);
+		panelRodape = new JPanel();
+		panelRodape.setBackground(new Color(0, 0, 160));
+		panelRodape.setBounds(-5, 394, 721, 52);
+		contentPane.add(panelRodape);
+		panelRodape.setLayout(null);
 		
 		lblData = new JLabel("New label");
+		lblData.setBounds(307, 11, 529, 20);
+		panelRodape.add(lblData);
 		lblData.setForeground(Color.WHITE);
 		lblData.setToolTipText("DATA");
 		lblData.setFont(new Font("Times New Roman", Font.BOLD, 18));
-		lblData.setBounds(25, 11, 529, 20);
-		panel.add(lblData);
+		
+		JLabel usuarioss = new JLabel("Usuario:");
+		usuarioss.setForeground(new Color(255, 255, 255));
+		usuarioss.setBounds(22, 14, 97, 14);
+		panelRodape.add(usuarioss);
+		usuarioss.setFont(new Font("Tahoma", Font.BOLD, 14));
+		
+		lblUsuario = new JLabel("");
+		lblUsuario.setForeground(new Color(255, 255, 255));
+		lblUsuario.setFont(new Font("Tahoma", Font.BOLD, 12));
+		lblUsuario.setBounds(131, 16, 154, 14);
+		panelRodape.add(lblUsuario);
 		
 		lblStatus = new JLabel("");
-		lblStatus.setBounds(572, 346, 48, 48);
+		lblStatus.setBounds(658, 343, 48, 48);
 		contentPane.add(lblStatus);
 		lblStatus.setIcon(new ImageIcon(Principal.class.getResource("/img/dboff.png")));
 		lblStatus.setToolTipText("Conexão");
@@ -159,20 +179,20 @@ public class Principal extends JFrame {
 		lblClientes.setBounds(177, 27, 72, 14);
 		contentPane.add(lblClientes);
 		
-		JButton btnUsuarios_2 = new JButton("");
-		btnUsuarios_2.setBackground(new Color(234, 240, 253));
-		btnUsuarios_2.addActionListener(new ActionListener() {
+		JButton btnServicos = new JButton("");
+		btnServicos.setBackground(new Color(234, 240, 253));
+		btnServicos.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				Servicos servicos= new Servicos();
 				servicos.setVisible(true);
 			}
 			
 		});
-		btnUsuarios_2.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-		btnUsuarios_2.setIcon(new ImageIcon(Principal.class.getResource("/img/configuracao.png")));
-		btnUsuarios_2.setToolTipText("Serviços");
-		btnUsuarios_2.setBounds(10, 255, 128, 128);
-		contentPane.add(btnUsuarios_2);
+		btnServicos.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+		btnServicos.setIcon(new ImageIcon(Principal.class.getResource("/img/configuracao.png")));
+		btnServicos.setToolTipText("Serviços");
+		btnServicos.setBounds(10, 255, 128, 128);
+		contentPane.add(btnServicos);
 		
 		JLabel lblMenu_3 = new JLabel("Relatórios");
 		lblMenu_3.setToolTipText("Relatórios");
@@ -180,20 +200,21 @@ public class Principal extends JFrame {
 		lblMenu_3.setBounds(201, 230, 72, 14);
 		contentPane.add(lblMenu_3);
 		
-		JButton btnUsuarios_3 = new JButton("");
-		btnUsuarios_3.setBackground(new Color(234, 240, 253));
-		btnUsuarios_3.addActionListener(new ActionListener() {
+		btnRelatorio = new JButton("");
+		btnRelatorio.setEnabled(false);
+		btnRelatorio.setBackground(new Color(234, 240, 253));
+		btnRelatorio.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				//clicar na tyela principal
 				Relatorios relatorios = new Relatorios();
 				relatorios.setVisible(true);
 			}
 		});
-		btnUsuarios_3.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-		btnUsuarios_3.setIcon(new ImageIcon(Principal.class.getResource("/img/2931174_clipboard_copy_paste_analysis_report_icon.png")));
-		btnUsuarios_3.setToolTipText("Relatórios");
-		btnUsuarios_3.setBounds(177, 255, 129, 129);
-		contentPane.add(btnUsuarios_3);
+		btnRelatorio.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+		btnRelatorio.setIcon(new ImageIcon(Principal.class.getResource("/img/2931174_clipboard_copy_paste_analysis_report_icon.png")));
+		btnRelatorio.setToolTipText("Relatórios");
+		btnRelatorio.setBounds(162, 255, 129, 129);
+		contentPane.add(btnRelatorio);
 		
 		JLabel lblMenu_3_1 = new JLabel("Serviços");
 		lblMenu_3_1.setToolTipText("Serviços");
@@ -204,13 +225,53 @@ public class Principal extends JFrame {
 		JLabel lblNewLabel = new JLabel("DoctorCell");
 		lblNewLabel.setFont(new Font("Tahoma", Font.BOLD, 17));
 		lblNewLabel.setForeground(new Color(0, 0, 160));
-		lblNewLabel.setBounds(431, 230, 237, 41);
+		lblNewLabel.setBounds(534, 231, 237, 41);
 		contentPane.add(lblNewLabel);
 		
 		JLabel lblNewLabel_1 = new JLabel("New label");
 		lblNewLabel_1.setIcon(new ImageIcon(Principal.class.getResource("/img/configuracao.png")));
-		lblNewLabel_1.setBounds(449, 180, 60, 64);
+		lblNewLabel_1.setBounds(560, 175, 60, 64);
 		contentPane.add(lblNewLabel_1);
+		
+		JButton btnClientes_1 = new JButton("");
+		btnClientes_1.setIcon(new ImageIcon(Principal.class.getResource("/img/fornecedor-128x128.png")));
+		btnClientes_1.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				
+				Fornecedores fornecedores = new Fornecedores();
+				fornecedores.setVisible(true);
+				
+				
+			}
+		});
+		btnClientes_1.setToolTipText("Clientes");
+		btnClientes_1.setBackground(new Color(234, 240, 253));
+		btnClientes_1.setBounds(333, 255, 139, 128);
+		contentPane.add(btnClientes_1);
+		
+		JButton btnClientes_1_1 = new JButton("");
+		btnClientes_1_1.setIcon(new ImageIcon(Principal.class.getResource("/img/6843036_courier_deliver_delivery_package_product_icon.png")));
+		btnClientes_1_1.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				Produtos produtos = new Produtos();
+				produtos.setVisible(true);
+				
+			}
+		});
+		btnClientes_1_1.setToolTipText("Clientes");
+		btnClientes_1_1.setBackground(new Color(234, 240, 253));
+		btnClientes_1_1.setBounds(333, 52, 128, 128);
+		contentPane.add(btnClientes_1_1);
+		
+		JLabel lblNewLabel_2 = new JLabel("Produtos");
+		lblNewLabel_2.setFont(new Font("Tahoma", Font.BOLD, 13));
+		lblNewLabel_2.setBounds(369, 28, 72, 14);
+		contentPane.add(lblNewLabel_2);
+		
+		JLabel lblNewLabel_3 = new JLabel("Fornecedores");
+		lblNewLabel_3.setFont(new Font("Tahoma", Font.BOLD, 13));
+		lblNewLabel_3.setBounds(348, 230, 102, 14);
+		contentPane.add(lblNewLabel_3);
 	
 
 	}

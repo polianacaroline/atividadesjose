@@ -20,6 +20,8 @@ import java.awt.event.WindowEvent;
 import java.awt.event.ActionEvent;
 import javax.swing.JPasswordField;
 import javax.swing.ImageIcon;
+
+import java.awt.Color;
 import java.awt.Cursor;
 import java.awt.Font;
 import java.awt.Toolkit;
@@ -131,7 +133,7 @@ public class Login extends JFrame {
 			txtSenha.requestFocus();
 		} else {
 			// logica principal
-			String read = "select * from usuarios where login=? and senha=?";
+			String read = "select * from usuarios where login=? and senha=md5(?)";
 			try {
 				con = dao.conectar();
 				pst = con.prepareStatement(read);
@@ -139,12 +141,33 @@ public class Login extends JFrame {
 				pst.setString(2, capturaSenha);
 				rs = pst.executeQuery();
 				if (rs.next()) {
-
+					//logar -> acessar a tela principal
+					//capturar o perfil do usuario
+					//System.out.println(rs.getString(5));apoio a logica
+					//tratameno do perfil do usuario
+					
+					String perfil = rs.getString(5);
+					if(perfil.equals("admin")) {
+					
+					principal.setVisible(true);
+					principal.lblUsuario.setText(rs.getString(2));
+					//habilitar os botoes
+					principal.btnRelatorio.setEnabled(true);
+					principal.btnUsuarios.setEnabled(true);
+					principal.panelRodape.setBackground(Color.RED);
+					//fechar a tela de login
+					this.dispose();
 					// logar
 					principal.setVisible(true);
 					// fechar a tela de login
-					this.dispose();
+					
 				} else {
+					principal.setVisible(true);
+					principal.lblUsuario.setText(rs.getString(2));
+					this.dispose();
+				}
+				} else {
+					
 					JOptionPane.showMessageDialog(null, "usuario e/ou senha inválido(s)");
 					con.close();
 				}
