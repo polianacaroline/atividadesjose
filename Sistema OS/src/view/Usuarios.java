@@ -332,7 +332,7 @@ public class Usuarios extends JDialog {
 		btnAdicionar.setEnabled(false);
 		btnBuscar = new JButton("Buscar");
 		btnBuscar.setEnabled(false);
-		
+		txtSenha.setEnabled(false);
 		cboPerfil.setSelectedItem("");
 		chckSenha.setSelected(false);
 		

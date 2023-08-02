@@ -21,6 +21,8 @@ import java.sql.Blob;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 import javax.imageio.ImageIO;
 import javax.swing.DefaultComboBoxModel;
@@ -36,14 +38,16 @@ import javax.swing.JList;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
+import javax.swing.JTextArea;
 import javax.swing.JTextField;
+import javax.swing.UIManager;
 import javax.swing.border.BevelBorder;
 import javax.swing.border.SoftBevelBorder;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
-import model.DAO;
-import javax.swing.UIManager;
 import com.toedter.calendar.JDateChooser;
+
+import model.DAO;
 
 public class Produtos extends JDialog {
 	private JTextField txtBarras;
@@ -78,11 +82,12 @@ public class Produtos extends JDialog {
 	private JTextField txtFabricante;
 	private JLabel lblNewLabel;
 	private JLabel lblNewLabel_1;
-	private JTextField txtGarantia;
-	private JLabel lblNewLabel_2;
 	private JTextField txtLucro;
 	private JLabel lblNewLabel_3;
 	private JLabel lblNewLabel_4;
+	private JDateChooser dateEnt;
+	private JDateChooser dateVali;
+	private JPanel panel;
 
 	/**
 	 * Launch the application.
@@ -140,10 +145,16 @@ public class Produtos extends JDialog {
 		
 		scrollPaneNome = new JScrollPane();
 		scrollPaneNome.setVisible(false);
+		
+		JLabel lblDescricao = new JLabel("Descrição:");
+		lblDescricao.setFont(new Font("Arial", Font.PLAIN, 16));
+		lblDescricao.setBounds(32, 192, 156, 19);
+		getContentPane().add(lblDescricao);
 		scrollPaneNome.setBounds(22, 165, 521, 29);
 		getContentPane().add(scrollPaneNome);
 		
 		listNome = new JList();
+		scrollPaneNome.setViewportView(listNome);
 		listNome.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
@@ -151,7 +162,6 @@ public class Produtos extends JDialog {
 			}
 		});
 		listNome.setFont(new Font("Arial", Font.PLAIN, 16));
-		scrollPaneNome.setViewportView(listNome);
 		scrollPaneProd.setBounds(316, 105, 227, 23);
 		getContentPane().add(scrollPaneProd);
 		
@@ -179,11 +189,6 @@ public class Produtos extends JDialog {
 		lblTitulo.setBounds(349, 0, 87, 40);
 		panel_1_1.add(lblTitulo);
 		
-		JPanel panel_1_1_1 = new JPanel();
-		panel_1_1_1.setLayout(null);
-		panel_1_1_1.setBounds(0, 493, 1098, 40);
-		getContentPane().add(panel_1_1_1);
-		
 		txtBarras = new JTextField();
 		txtBarras.setFont(new Font("Arial", Font.PLAIN, 16));
 		txtBarras.setColumns(10);
@@ -197,7 +202,7 @@ public class Produtos extends JDialog {
 		lblBarCode.setBounds(22, 51, 156, 19);
 		getContentPane().add(lblBarCode);
 		
-		JPanel panel = new JPanel();
+		panel = new JPanel();
 		panel.setBorder(new SoftBevelBorder(BevelBorder.LOWERED, null, null, null, null));
 		panel.setBounds(789, 51, 285, 345);
 		getContentPane().add(panel);
@@ -235,17 +240,12 @@ public class Produtos extends JDialog {
 		btnPesq.setBounds(238, 31, 32, 32);
 		panel.add(btnPesq);
 		
-		JLabel lblDescricao = new JLabel("Descrição:");
-		lblDescricao.setFont(new Font("Arial", Font.PLAIN, 16));
-		lblDescricao.setBounds(22, 171, 156, 19);
-		getContentPane().add(lblDescricao);
-		
 		txtDesc = new JTextField();
 		txtDesc.setFont(new Font("Arial", Font.PLAIN, 16));
 		txtDesc.setColumns(10);
 		txtDesc.setBorder(new SoftBevelBorder(BevelBorder.LOWERED, null, null, null, null));
 		txtDesc.setBackground(SystemColor.menu);
-		txtDesc.setBounds(22, 193, 521, 29);
+		txtDesc.setBounds(22, 212, 360, 29);
 		getContentPane().add(txtDesc);
 		
 		txtEstoqueMin = new JTextField();
@@ -264,12 +264,12 @@ public class Produtos extends JDialog {
 		txtEstoqueMin.setColumns(10);
 		txtEstoqueMin.setBorder(new SoftBevelBorder(BevelBorder.LOWERED, null, null, null, null));
 		txtEstoqueMin.setBackground(SystemColor.menu);
-		txtEstoqueMin.setBounds(168, 258, 136, 29);
+		txtEstoqueMin.setBounds(168, 325, 136, 29);
 		getContentPane().add(txtEstoqueMin);
 		
 		JLabel lblEstoque = new JLabel("Estoque*");
 		lblEstoque.setFont(new Font("Arial", Font.PLAIN, 16));
-		lblEstoque.setBounds(22, 233, 156, 19);
+		lblEstoque.setBounds(22, 300, 156, 19);
 		getContentPane().add(lblEstoque);
 		
 		txtEstoque = new JTextField();
@@ -289,27 +289,27 @@ public class Produtos extends JDialog {
 		txtEstoque.setColumns(10);
 		txtEstoque.setBorder(new SoftBevelBorder(BevelBorder.LOWERED, null, null, null, null));
 		txtEstoque.setBackground(SystemColor.menu);
-		txtEstoque.setBounds(22, 258, 136, 29);
+		txtEstoque.setBounds(22, 325, 136, 29);
 		getContentPane().add(txtEstoque);
 		
 		JLabel lblDescricao_1_1 = new JLabel("Estoque Mínimo*");
 		lblDescricao_1_1.setFont(new Font("Arial", Font.PLAIN, 16));
-		lblDescricao_1_1.setBounds(168, 233, 156, 19);
+		lblDescricao_1_1.setBounds(168, 300, 156, 19);
 		getContentPane().add(lblDescricao_1_1);
 		
 		JLabel lblDescricao_1_1_1 = new JLabel("Unidade de medida:");
 		lblDescricao_1_1_1.setFont(new Font("Arial", Font.PLAIN, 16));
-		lblDescricao_1_1_1.setBounds(316, 233, 156, 19);
+		lblDescricao_1_1_1.setBounds(316, 300, 156, 19);
 		getContentPane().add(lblDescricao_1_1_1);
 		
 		cboMedida = new JComboBox();
 		cboMedida.setModel(new DefaultComboBoxModel(new String[] {"UN", "CX", "PC", "Kg", "m"}));
-		cboMedida.setBounds(314, 258, 78, 29);
+		cboMedida.setBounds(314, 325, 78, 29);
 		getContentPane().add(cboMedida);
 		
 		JLabel lblLocalDeArmazenagem = new JLabel("Local de Armazenagem:");
 		lblLocalDeArmazenagem.setFont(new Font("Arial", Font.PLAIN, 16));
-		lblLocalDeArmazenagem.setBounds(22, 298, 189, 19);
+		lblLocalDeArmazenagem.setBounds(22, 365, 189, 19);
 		getContentPane().add(lblLocalDeArmazenagem);
 		
 		txtArmazem = new JTextField();
@@ -317,12 +317,12 @@ public class Produtos extends JDialog {
 		txtArmazem.setColumns(10);
 		txtArmazem.setBorder(new SoftBevelBorder(BevelBorder.LOWERED, null, null, null, null));
 		txtArmazem.setBackground(SystemColor.menu);
-		txtArmazem.setBounds(22, 323, 261, 29);
+		txtArmazem.setBounds(22, 390, 261, 29);
 		getContentPane().add(txtArmazem);
 		
 		JLabel lblEstoque_1_1 = new JLabel("Valor*");
 		lblEstoque_1_1.setFont(new Font("Arial", Font.PLAIN, 16));
-		lblEstoque_1_1.setBounds(22, 361, 156, 19);
+		lblEstoque_1_1.setBounds(22, 428, 156, 19);
 		getContentPane().add(lblEstoque_1_1);
 		
 		txtValor = new JTextField();
@@ -342,7 +342,7 @@ public class Produtos extends JDialog {
 		txtValor.setColumns(10);
 		txtValor.setBorder(new SoftBevelBorder(BevelBorder.LOWERED, null, null, null, null));
 		txtValor.setBackground(SystemColor.menu);
-		txtValor.setBounds(22, 386, 261, 29);
+		txtValor.setBounds(22, 453, 261, 29);
 		getContentPane().add(txtValor);
 		
 		btnAdicionar = new JButton("");
@@ -357,7 +357,7 @@ public class Produtos extends JDialog {
 		btnAdicionar.setContentAreaFilled(false);
 		btnAdicionar.setBorderPainted(false);
 		btnAdicionar.setIcon(new ImageIcon(Produtos.class.getResource("/img/9056782_add_icon.png")));
-		btnAdicionar.setBounds(305, 414, 68, 68);
+		btnAdicionar.setBounds(777, 441, 68, 68);
 		getContentPane().add(btnAdicionar);
 		
 		btnEditar = new JButton("");
@@ -371,7 +371,7 @@ public class Produtos extends JDialog {
 		btnEditar.setContentAreaFilled(false);
 		btnEditar.setBorderPainted(false);
 		btnEditar.setIcon(new ImageIcon(Produtos.class.getResource("/img/2931178_change_edit_pencil_creative_design_icon.png")));
-		btnEditar.setBounds(383, 414, 64, 64);
+		btnEditar.setBounds(855, 441, 64, 64);
 		getContentPane().add(btnEditar);
 		
 		btnExcluir = new JButton("");
@@ -385,7 +385,7 @@ public class Produtos extends JDialog {
 		btnExcluir.setIcon(new ImageIcon(Produtos.class.getResource("/img/trast.png")));
 		btnExcluir.setContentAreaFilled(false);
 		btnExcluir.setBorderPainted(false);
-		btnExcluir.setBounds(457, 416, 64, 64);
+		btnExcluir.setBounds(929, 443, 64, 64);
 		getContentPane().add(btnExcluir);
 		
 		JLabel lblIDFor = new JLabel("ID do Fornecedor:");
@@ -422,7 +422,7 @@ public class Produtos extends JDialog {
 		btnBorracha.setBorderPainted(false);
 		btnBorracha.setContentAreaFilled(false);
 		btnBorracha.setIcon(new ImageIcon(Produtos.class.getResource("/img/9165598_eraser_erase_icon.png")));
-		btnBorracha.setBounds(531, 418, 64, 64);
+		btnBorracha.setBounds(1003, 445, 64, 64);
 		getContentPane().add(btnBorracha);
 		
 		txtNome = new JTextField();
@@ -468,47 +468,39 @@ public class Produtos extends JDialog {
 		
 		lblNewLabel_1 = new JLabel("Data Entrada*");
 		lblNewLabel_1.setFont(new Font("Arial", Font.PLAIN, 16));
-		lblNewLabel_1.setBounds(553, 237, 130, 14);
+		lblNewLabel_1.setBounds(563, 205, 130, 14);
 		getContentPane().add(lblNewLabel_1);
-		
-		txtGarantia = new JTextField();
-		txtGarantia.setFont(new Font("Arial", Font.PLAIN, 16));
-		txtGarantia.setColumns(10);
-		txtGarantia.setBorder(new SoftBevelBorder(BevelBorder.LOWERED, null, null, null, null));
-		txtGarantia.setBackground(SystemColor.menu);
-		txtGarantia.setBounds(293, 323, 179, 29);
-		getContentPane().add(txtGarantia);
-		
-		lblNewLabel_2 = new JLabel("Garantia*");
-		lblNewLabel_2.setFont(new Font("Arial", Font.PLAIN, 16));
-		lblNewLabel_2.setBounds(293, 302, 99, 14);
-		getContentPane().add(lblNewLabel_2);
 		
 		txtLucro = new JTextField();
 		txtLucro.setFont(new Font("Arial", Font.PLAIN, 16));
 		txtLucro.setColumns(10);
 		txtLucro.setBorder(new SoftBevelBorder(BevelBorder.LOWERED, null, null, null, null));
 		txtLucro.setBackground(SystemColor.menu);
-		txtLucro.setBounds(293, 386, 250, 29);
+		txtLucro.setBounds(293, 453, 250, 29);
 		getContentPane().add(txtLucro);
 		
 		lblNewLabel_3 = new JLabel("Lucro:");
 		lblNewLabel_3.setFont(new Font("Arial", Font.PLAIN, 16));
-		lblNewLabel_3.setBounds(292, 365, 46, 14);
+		lblNewLabel_3.setBounds(292, 432, 46, 14);
 		getContentPane().add(lblNewLabel_3);
 		
 		lblNewLabel_4 = new JLabel("Data Validade*");
 		lblNewLabel_4.setFont(new Font("Arial", Font.PLAIN, 16));
-		lblNewLabel_4.setBounds(567, 298, 140, 14);
+		lblNewLabel_4.setBounds(553, 265, 140, 14);
 		getContentPane().add(lblNewLabel_4);
 		
-		JDateChooser dateEnt = new JDateChooser();
-		dateEnt.setBounds(546, 258, 179, 20);
+		dateEnt = new JDateChooser();
+		dateEnt.setBounds(546, 233, 179, 20);
 		getContentPane().add(dateEnt);
 		
-		JDateChooser dateVali = new JDateChooser();
-		dateVali.setBounds(542, 323, 183, 20);
+		dateVali = new JDateChooser();
+		dateVali.setBounds(542, 290, 183, 20);
 		getContentPane().add(dateVali);
+		
+		JTextArea txtArea = new JTextArea();
+		txtArea.setBackground(new Color(192, 192, 192));
+		txtArea.setBounds(22, 241, 360, 52);
+		getContentPane().add(txtArea);
 		setBounds(100, 100, 1114, 572);
 
 	}
@@ -574,10 +566,7 @@ public class Produtos extends JDialog {
 			JOptionPane.showMessageDialog(null, "Preencha o campo 'Fabricante'.");
 			txtFabricante.requestFocus();
 			
-		} else if (txtGarantia.getText().isEmpty()) {
-			JOptionPane.showMessageDialog(null, "Preencha o campo 'Garantia'.");
-			txtGarantia.requestFocus();
-			
+		
 			btnAdicionar.setEnabled(true);
 			btnEditar.setEnabled(true);
 			btnExcluir.setEnabled(true);
@@ -589,7 +578,7 @@ public class Produtos extends JDialog {
 			// lógica principal
 			// CRUD Create
 			String create = "INSERT INTO produtos (barcode, descricao, foto, estoque, estoquemin, valor, medida, armazenagem, idfornecedor, nome, "
-					+ "lote, fabricante, garantia, lucro) VALUES ( ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+					+ "lote, fabricante,lucro) VALUES ( ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 			// tratamento de exceções
 
 			try {
@@ -610,8 +599,7 @@ public class Produtos extends JDialog {
 				pst.setString(10, txtNome.getText());
 				pst.setString(11, txtLote.getText());
 				pst.setString(12, txtFabricante.getText());
-				pst.setString(13, txtGarantia.getText());
-				pst.setString(14, txtLucro.getText());
+				pst.setString(13, txtLucro.getText());
 				
 				
 				
@@ -711,12 +699,12 @@ public class Produtos extends JDialog {
 						txtNome.setText(rs.getString(11)); // 4º Campo da Tabela ID
 						txtLote.setText(rs.getString(12));
 						txtFabricante.setText(rs.getString(13));
-						txtGarantia.setText(rs.getString(14));
+						
 						
 						btnEditar.setEnabled(true);
 						btnExcluir.setEnabled(true);
 						
-					
+						
 						
 						
 						Blob blob = (Blob) rs.getBlob(4);
@@ -816,7 +804,7 @@ public class Produtos extends JDialog {
 
 						txtID.setText(rs.getString(1)); // 1º Campo da Tabela ID
 						txtBarras.setText(rs.getString(2)); // 2º Campo da Tabela ID
-						txtDesc.setText(rs.getString(3)); // 3º Campo da Tabela ID
+						txtDesc.setText(rs.getNString(3)); // 3º Campo da Tabela ID
 						txtEstoque.setText(rs.getString(5)); // 4º Campo da Tabela ID
 						txtEstoqueMin.setText(rs.getString(6)); // 4º Campo da Tabela ID
 						txtValor.setText(rs.getString(7)); // 4º Campo da Tabela ID
@@ -826,7 +814,6 @@ public class Produtos extends JDialog {
 						txtNome.setText(rs.getString(11)); // 4º Campo da Tabela ID
 						txtLote.setText(rs.getString(12));
 						txtFabricante.setText(rs.getString(13));
-						txtGarantia.setText(rs.getString(14));
 						
 						btnEditar.setEnabled(true);
 						btnExcluir.setEnabled(true);
@@ -913,7 +900,7 @@ public class Produtos extends JDialog {
 				// logica principal
 				// CRUD - Update
 				String update = "update produtos set barcode=?, descricao=?, foto=?, estoque=?, estoquemin=?, valor=?, medida=?, armazenagem=?, idfornecedor=?, nome=?, lote=?, "
-						+ "fabricante=?, garantia=?, lucro=? where codigoproduto=?";
+						+ "fabricante=?,lucro=? where codigoproduto=?";
 				// trat de exceção
 				try {
 					// abrir conexão
@@ -933,8 +920,7 @@ public class Produtos extends JDialog {
 					pst.setString(10, txtNome.getText());
 					pst.setString(11, txtLote.getText());
 					pst.setString(12, txtFabricante.getText());
-					pst.setString(13, txtGarantia.getText());
-					pst.setString(14, txtLucro.getText());
+					pst.setString(13, txtLucro.getText());
 					
 					
 					
@@ -1010,7 +996,7 @@ public class Produtos extends JDialog {
 		private void buscarProduto() {
 			// captura do numero a OS (sem usar caixa de txt)
 			String produto = JOptionPane.showInputDialog("Digite o código do produto: ");
-
+		
 			// System.out.println("Teste do botão buscar");
 
 			// Criar uma variável com a query (instrução do banco)
@@ -1045,8 +1031,20 @@ public class Produtos extends JDialog {
 					txtNome.setText(rs.getString(11)); // 4º Campo da Tabela ID
 					txtLote.setText(rs.getString(12));
 					txtFabricante.setText(rs.getString(13));
-					txtGarantia.setText(rs.getString(14));
+					//setardata
+					//1- receber data do mysql
+					//2  formatar a data para JCalendar
+					String setarDataEnt = rs.getString(14);
+					System.out.println(setarDataEnt);//setardata
+					Date dataEntrada = new SimpleDateFormat("yyyy-MM-dd").parse(setarDataEnt);									
+					dateEnt.setDate(dataEntrada);
 					
+					//----------------------------------------------------------------------------
+					String setarDataVal = rs.getString(15);
+					Date dataValidade = new SimpleDateFormat("yyyy-MM-dd").parse(setarDataVal);									
+					dateVali.setDate(dataEntrada);
+					
+					//------------------------------------------------------------------------------
 					btnEditar.setEnabled(true);
 					btnExcluir.setEnabled(true);
 				
@@ -1098,7 +1096,7 @@ public class Produtos extends JDialog {
 				lblFoto.setIcon(null);
 				txtLote.setText(null);
 				txtFabricante.setText(null);
-				txtGarantia.setText(null);
+				
 				
 				btnEditar.setEnabled(false);
 				btnExcluir.setEnabled(false);

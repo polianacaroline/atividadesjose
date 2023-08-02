@@ -76,7 +76,7 @@ public class Sobre extends JDialog {
 		btnGithub.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				link("https://github.com/polianacaroline");
+				link("https://github.com/polianacaroline/sistemaOS/tree/main/src/view");
 			}
 		});
 		btnGithub.setContentAreaFilled(false);
