@@ -559,6 +559,7 @@ public class Fornecedores extends JDialog {
 				pst.setString(9, txtReferencia.getText());
 				pst.setString(10, txtCidade.getText());
 				pst.setString(11, cboUF.getSelectedItem().toString());
+				pst.setString(11, txtTel.getText());
 				pst.setString(12, txtSite.getText());
 				pst.setString(13, txtCel.getText());
 				pst.setString(14, txtEmail.getText());

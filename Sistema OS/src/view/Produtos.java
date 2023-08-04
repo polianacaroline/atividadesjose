@@ -567,6 +567,16 @@ public class Produtos extends JDialog {
 			txtFabricante.requestFocus();
 			
 		
+			
+		} else if (dateEnt.equals(" ")) {
+			JOptionPane.showMessageDialog(null, "Preencha o campo 'DataEntrada'.");
+			dateEnt.requestFocus();
+			
+			
+		} else if (dateVali.equals(" ")) {
+			JOptionPane.showMessageDialog(null, "Preencha o campo 'DataValidade'.");
+			dateVali.requestFocus();
+			
 			btnAdicionar.setEnabled(true);
 			btnEditar.setEnabled(true);
 			btnExcluir.setEnabled(true);
@@ -578,7 +588,7 @@ public class Produtos extends JDialog {
 			// lógica principal
 			// CRUD Create
 			String create = "INSERT INTO produtos (barcode, descricao, foto, estoque, estoquemin, valor, medida, armazenagem, idfornecedor, nome, "
-					+ "lote, fabricante,lucro) VALUES ( ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+					+ "lote, fabricante, dataent, dataval, lucro) VALUES ( ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ? ,? ,?)";
 			// tratamento de exceções
 
 			try {
@@ -599,7 +609,21 @@ public class Produtos extends JDialog {
 				pst.setString(10, txtNome.getText());
 				pst.setString(11, txtLote.getText());
 				pst.setString(12, txtFabricante.getText());
-				pst.setString(13, txtLucro.getText());
+				pst.setString(15, txtLucro.getText());
+				
+				
+				
+				
+				SimpleDateFormat formatador = new SimpleDateFormat("yyyyMMdd");
+				String dataFormatada = formatador.format(dateEnt.getDate());
+				pst.setString(13, dataFormatada);
+
+			
+				SimpleDateFormat formatadorval = new SimpleDateFormat("yyyyMMdd");
+				String dataFormatadaval = formatadorval.format(dateVali.getDate());
+				pst.setString(14, dataFormatadaval);
+				
+				
 				
 				
 				
