@@ -26,6 +26,8 @@ show databases;
 
 use dbsistema;
 
+
+
 show tables;
 drop table fornecedores;
 drop table produtos;

@@ -248,7 +248,7 @@ public class Fornecedores extends JDialog {
 		txtSite.setColumns(10);
 		txtSite.setBounds(20, 353, 166, 29);
 		getContentPane().add(txtSite);
-		txtSite.setDocument(new Validador(12));
+		txtSite.setDocument(new Validador(20));
 		
 		JLabel lblCnpj_1_1_1 = new JLabel("Complemento:");
 		lblCnpj_1_1_1.setFont(new Font("Arial", Font.PLAIN, 16));
@@ -464,6 +464,8 @@ public class Fornecedores extends JDialog {
 		txtTel.setBackground(SystemColor.menu);
 		txtTel.setBounds(20, 268, 166, 29);
 		getContentPane().add(txtTel);
+		txtTel.setDocument(new Validador(12));
+		
 		
 		txtIE = new JTextField();
 		txtIE.setFont(new Font("Arial", Font.PLAIN, 12));
@@ -559,8 +561,7 @@ public class Fornecedores extends JDialog {
 				pst.setString(9, txtReferencia.getText());
 				pst.setString(10, txtCidade.getText());
 				pst.setString(11, cboUF.getSelectedItem().toString());
-				pst.setString(11, txtTel.getText());
-				pst.setString(12, txtSite.getText());
+				pst.setString(12, txtTel.getText());
 				pst.setString(13, txtCel.getText());
 				pst.setString(14, txtEmail.getText());
 				pst.setString(15, txtIE.getText());
@@ -578,12 +579,13 @@ public class Fornecedores extends JDialog {
 				con.close();
 
 			} catch (java.sql.SQLIntegrityConstraintViolationException e1) {
-				JOptionPane.showMessageDialog(null, "Cliente não adicionado.\nEste CNPJ ou EMAIL já está sendo utilizado.");
+				JOptionPane.showMessageDialog(null, "Cliente não adicionado.\nEste RAZAOSOCIAL, CNPJ e/ou EMAIL já está sendo utilizado.");
 				txtCNPJ.setText(null);
 				txtCNPJ.requestFocus();
 				txtEmail.setText(null);
 				txtEmail.requestFocus();
-				
+				txtRazao.requestFocus();
+				txtRazao.setText(null);
 			
 			} catch (Exception e2) {
 				System.out.println(e2);
