@@ -115,6 +115,7 @@ public class Fornecedores extends JDialog {
 			@Override
 			public void mouseClicked(MouseEvent e) {
 				buscarFornecedorLista();
+				
 			}
 		});
 		scrollPaneFor.setViewportView(listFor);
@@ -151,6 +152,7 @@ public class Fornecedores extends JDialog {
 		
 		txtRazao = new JTextField();
 		txtRazao.addKeyListener(new KeyAdapter() {
+			
 			@Override
 			public void keyReleased(KeyEvent e) {
 				listarFornecedor();
@@ -163,7 +165,7 @@ public class Fornecedores extends JDialog {
 		getContentPane().add(txtRazao);
 		txtRazao.setColumns(10);
 		txtRazao.setDocument(new Validador(50));
-
+		txtRazao.setDocument(new Validador(50));
 		
 		txtID = new JTextField();
 		txtID.setEditable(false);
