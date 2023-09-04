@@ -16,15 +16,8 @@ celular varchar(12) not null,
 email varchar(50) not null unique
 );
 
-select * from fornecedores;
-select * from produtos;
-show databases; 
 
-use dbsistema;
 
-show tables;
-drop table fornecedores;
-drop table produtos;
 
 create table produtos(
 codigoproduto int primary key auto_increment,
@@ -45,15 +38,10 @@ foreign key (idfornecedor) references fornecedores(idfornecedor)
 
 
 
-select * from usuarios;
-select * from produtos;
-drop table usuarios;
+
 
 insert into usuarios(nome,login,senha,perfil)values('Poliana','poliana',md5('123@senac'), 'user');
 
-select * from fornecedores
-inner join produtos
-on produtos.idfornecedor = fornecedores.idfornecedor;
 
 
 create table usuarios (

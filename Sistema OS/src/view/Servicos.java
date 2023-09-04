@@ -1,6 +1,7 @@
 package view;
 
 import java.awt.Color;
+import java.awt.Cursor;
 import java.awt.Desktop;
 import java.awt.EventQueue;
 import java.awt.event.ActionEvent;
@@ -12,8 +13,10 @@ import java.awt.event.MouseEvent;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.sql.Connection;
+import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.text.SimpleDateFormat;
 
 import javax.swing.DefaultListModel;
 import javax.swing.ImageIcon;
@@ -26,17 +29,26 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextField;
 import javax.swing.border.TitledBorder;
+import javax.swing.text.AbstractDocument;
 
+import com.itextpdf.text.BaseColor;
+import com.itextpdf.text.Chunk;
 import com.itextpdf.text.Document;
 import com.itextpdf.text.Element;
+import com.itextpdf.text.Font;
+import com.itextpdf.text.FontFactory;
 import com.itextpdf.text.Image;
 import com.itextpdf.text.Paragraph;
+import com.itextpdf.text.Phrase;
+import com.itextpdf.text.pdf.PdfContentByte;
+import com.itextpdf.text.pdf.PdfPCell;
+import com.itextpdf.text.pdf.PdfPTable;
 import com.itextpdf.text.pdf.PdfWriter;
 
 import model.DAO;
-import java.awt.Cursor;
 
 public class Servicos extends JDialog {
+	private static final PdfWriter writer = null;
 	private JTextField txtOS;
 	private JTextField txtData;
 	private JTextField txtEquipamento;
@@ -50,6 +62,7 @@ public class Servicos extends JDialog {
 	private JTextField txtCliente;
 	private JScrollPane scrollPaneCli;
 	private JList listCli;
+	private Font contentFont;
 
 	/**
 	 * Launch the application.
@@ -185,7 +198,7 @@ public class Servicos extends JDialog {
 		panel.setBackground(new Color(0, 0, 255));
 		panel.setBounds(0, 321, 552, 34);
 		getContentPane().add(panel);
-		
+
 		JButton btnLimpar = new JButton("");
 		btnLimpar.setToolTipText("Limpar");
 		btnLimpar.setIcon(new ImageIcon(Servicos.class.getResource("/img/9110490_rubber_icon.png")));
@@ -197,68 +210,66 @@ public class Servicos extends JDialog {
 		});
 		btnLimpar.setBounds(320, 276, 89, 34);
 		getContentPane().add(btnLimpar);
-		
+
 		JPanel panel_1 = new JPanel();
 		panel_1.setBorder(new TitledBorder(null, "Cliente", TitledBorder.LEADING, TitledBorder.TOP, null, null));
 		panel_1.setBounds(372, 11, 170, 94);
 		getContentPane().add(panel_1);
 		panel_1.setLayout(null);
-				
-				scrollPaneCli = new JScrollPane();
-				scrollPaneCli.setVisible(false);
-				scrollPaneCli.setBounds(10, 39, 150, 44);
-				panel_1.add(scrollPaneCli);
-				
-				listCli = new JList();
-				listCli.addMouseListener(new MouseAdapter() {
-					@Override
-					public void mouseClicked(MouseEvent e) {
-						BuscarClientesLista();
-						
-					}
-				});
-				scrollPaneCli.setRowHeaderView(listCli);
-		
-				txtID = new JTextField();
-				txtID.setEditable(false);
-				txtID.setBounds(45, 63, 86, 20);
-				panel_1.add(txtID);
-				txtID.setColumns(10);
-				
-				txtCliente = new JTextField();
-				txtCliente.addKeyListener(new KeyAdapter() {
-					@Override
-					public void keyReleased(KeyEvent e) {
-						listarClientes();
-					}
-				});
-				txtCliente.setBounds(10, 21, 150, 20);
-				panel_1.add(txtCliente);
-				txtCliente.setColumns(10);
-				
-						JLabel lblNewLabel_5 = new JLabel("ID");
-						lblNewLabel_5.setBounds(10, 66, 25, 14);
-						panel_1.add(lblNewLabel_5);
-						
-						JButton btnOS = new JButton("");
-						btnOS.setToolTipText("Imprimir");
-						btnOS.setIcon(new ImageIcon(Servicos.class.getResource("/img/printer.png")));
-						btnOS.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-						btnOS.addActionListener(new ActionListener() {
-							public void actionPerformed(ActionEvent e) {
-								imprimirOS();
-							}
-						});
-						btnOS.setBounds(432, 276, 89, 34);
-						getContentPane().add(btnOS);
+
+		scrollPaneCli = new JScrollPane();
+		scrollPaneCli.setVisible(false);
+		scrollPaneCli.setBounds(10, 39, 150, 44);
+		panel_1.add(scrollPaneCli);
+
+		listCli = new JList();
+		listCli.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				BuscarClientesLista();
+
+			}
+		});
+		scrollPaneCli.setRowHeaderView(listCli);
+
+		txtID = new JTextField();
+		txtID.setEditable(false);
+		txtID.setBounds(45, 63, 86, 20);
+		panel_1.add(txtID);
+		txtID.setColumns(10);
+
+		txtCliente = new JTextField();
+		txtCliente.addKeyListener(new KeyAdapter() {
+			@Override
+			public void keyReleased(KeyEvent e) {
+				listarClientes();
+			}
+		});
+		txtCliente.setBounds(10, 21, 150, 20);
+		panel_1.add(txtCliente);
+		txtCliente.setColumns(10);
+
+		JLabel lblNewLabel_5 = new JLabel("ID");
+		lblNewLabel_5.setBounds(10, 66, 25, 14);
+		panel_1.add(lblNewLabel_5);
+
+		JButton btnOS = new JButton("");
+		btnOS.setToolTipText("Imprimir");
+		btnOS.setIcon(new ImageIcon(Servicos.class.getResource("/img/printer.png")));
+		btnOS.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+		btnOS.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				imprimirOS();
+			}
+		});
+		btnOS.setBounds(432, 276, 89, 34);
+		getContentPane().add(btnOS);
 
 	}
 
 	private void buscar() {
-		//captura do numero da OS(sem caixa de TEXTO)
+		// captura do numero da OS(sem caixa de TEXTO)
 		String numOS = JOptionPane.showInputDialog("Numero da OS");
-		
-		
 
 		// System.out.println("Teste do botão buscar");
 
@@ -267,7 +278,7 @@ public class Servicos extends JDialog {
 		// Tratamento de exceções
 		String read = "select * from servicos where os = ?";
 		try {
-			
+
 			// abrir a conexão
 			con = dao.conectar();
 			// preparar a execucão da query( instrução sql - CRUD Read)
@@ -287,68 +298,68 @@ public class Servicos extends JDialog {
 				txtDefeito.setText(rs.getString(4));
 				txtValor.setText(rs.getString(5));
 				txtID.setText(rs.getString(6));
-				//btn.setEnabled(true);
-				//btnApagar.setEnabled(true);
+				// btn.setEnabled(true);
+				// btnApagar.setEnabled(true);
 
 			} else {
 				// System.out.println("Contaos não cadastrados");
 				JOptionPane.showMessageDialog(null, "OS inexistente");
-				//btnAdicionar.setEnabled(true);
+				// btnAdicionar.setEnabled(true);
 
 			}
 			con.close();
 		} catch (Exception e) {
 			System.out.println(e);
 		}
-	
+
 	}
 
 	private void adicionar() {
-				// System.out.println("teste");
-				//if (txtOS.getText().isEmpty()) {
-					//JOptionPane.showMessageDialog(null, "Preencha a OS");
-					//txtOS.requestFocus();
-	 
-				if (txtEquipamento.getText().isEmpty()) {
-					JOptionPane.showMessageDialog(null, "Preencha o Equipamento");
-					txtEquipamento.requestFocus();
-				} else if (txtDefeito.getText().isEmpty()) {
-					JOptionPane.showMessageDialog(null, "Preencha o  Defeito");
-					txtDefeito.requestFocus();
-				} else if (txtValor.getText().isEmpty()) {
-					JOptionPane.showMessageDialog(null, "Preencha o Valor ");
-					txtValor.requestFocus();
-				} else {
-					
+		// System.out.println("teste");
+		// if (txtOS.getText().isEmpty()) {
+		// JOptionPane.showMessageDialog(null, "Preencha a OS");
+		// txtOS.requestFocus();
 
-					// logica principal
-					// CRUD Create
-					String create = "insert into servicos(equipamento,defeito,valor,id) values (?,?,?,?)";
-					// tratamento de excecoes
-					try {
-						// abrir a conexao
-						con = dao.conectar();
-						// preparar a execucao da query(instrucao sql - CRUD create)
-						pst = con.prepareStatement(create);
+		if (txtEquipamento.getText().isEmpty()) {
+			JOptionPane.showMessageDialog(null, "Preencha o Equipamento");
+			txtEquipamento.requestFocus();
+		} else if (txtDefeito.getText().isEmpty()) {
+			JOptionPane.showMessageDialog(null, "Preencha o  Defeito");
+			txtDefeito.requestFocus();
+		} else if (txtValor.getText().isEmpty()) {
+			JOptionPane.showMessageDialog(null, "Preencha o Valor ");
+			txtValor.requestFocus();
+		} else {
 
-						pst.setString(1, txtEquipamento.getText());
-						pst.setString(2, txtDefeito.getText());
-						pst.setString(3, txtValor.getText());
-						pst.setString(4, txtID.getText());
+			// logica principal
+			// CRUD Create
+			String create = "insert into servicos(equipamento,defeito,valor,id) values (?,?,?,?)";
+			// tratamento de excecoes
+			try {
+				// abrir a conexao
+				con = dao.conectar();
+				// preparar a execucao da query(instrucao sql - CRUD create)
+				pst = con.prepareStatement(create);
 
-						// executar a query(instrucao sql (CRUD - Create)
-						pst.executeUpdate();
-						// confirmar
-						JOptionPane.showMessageDialog(null, "OS adicionada");
-						// lpar campos
-						limpar();
-						// fechar a conexao
-						con.close();
-					} catch (Exception e) {
-						System.out.println(e);
-					}
-}
+				pst.setString(1, txtEquipamento.getText());
+				pst.setString(2, txtDefeito.getText());
+				pst.setString(3, txtValor.getText());
+				pst.setString(4, txtID.getText());
+
+				// executar a query(instrucao sql (CRUD - Create)
+				pst.executeUpdate();
+				// confirmar
+				JOptionPane.showMessageDialog(null, "OS adicionada");
+				// lpar campos
+				limpar();
+				// fechar a conexao
+				con.close();
+			} catch (Exception e) {
+				System.out.println(e);
+			}
+		}
 	}
+
 	private void editarOS() {
 		// System.out.println("Teste do botão");
 		// validacao dos campos obrigatorio
@@ -368,32 +379,33 @@ public class Servicos extends JDialog {
 			// logica principal
 			// CRUD -UPDATE
 		}
-			String update = "update servicos set equipamento=?,defeito=?,valor=? where id=?";
-			// tratamento de excecoes
-			
-			try {
-				con = dao.conectar();
-				pst = con.prepareStatement(update);
-				// preparar a query (instrucao sql)
-				pst.setString(1, txtEquipamento.getText());
-				pst.setString(2, txtDefeito.getText());
-				pst.setString(3, txtValor.getText());
-				pst.setString(4, txtID.getText());
-			
-				// execuatra a query
-				pst.executeUpdate();
-				// confirmar para o usuario
-				JOptionPane.showMessageDialog(null, "Dados da OS editados com sucesso!!");
-				// limpar campos
-				limpar();
-				// fechar Campos
-				con.close();
+		String update = "update servicos set equipamento=?,defeito=?,valor=? where id=?";
+		// tratamento de excecoes
 
-			} catch (Exception e) {
-				System.out.println(e);
-			}
+		try {
+			con = dao.conectar();
+			pst = con.prepareStatement(update);
+			// preparar a query (instrucao sql)
+			pst.setString(1, txtEquipamento.getText());
+			pst.setString(2, txtDefeito.getText());
+			pst.setString(3, txtValor.getText());
+			pst.setString(4, txtID.getText());
 
+			// execuatra a query
+			pst.executeUpdate();
+			// confirmar para o usuario
+			JOptionPane.showMessageDialog(null, "Dados da OS editados com sucesso!!");
+			// limpar campos
+			limpar();
+			// fechar Campos
+			con.close();
+
+		} catch (Exception e) {
+			System.out.println(e);
 		}
+
+	}
+
 	private void limpar() {
 		txtID.setText(null);
 		txtData.setText(null);
@@ -401,8 +413,9 @@ public class Servicos extends JDialog {
 		txtDefeito.setText(null);
 		txtValor.setText(null);
 		txtCliente.setText(null);
-		
+
 	}
+
 	private void listarClientes() {
 		// System.out.println("Teste");
 		// a linha cria um objeto usando como referencia um vetor dinamico, este objeto
@@ -438,6 +451,7 @@ public class Servicos extends JDialog {
 			System.out.println(e);
 		}
 	}
+
 	private void BuscarClientesLista() {
 		// System.out.println("Teste");
 		int linha = listCli.getSelectedIndex();
@@ -459,9 +473,6 @@ public class Servicos extends JDialog {
 					// setar os campos
 					txtID.setText(rs.getString(1));
 					txtCliente.setText(rs.getString(2));
-					
-
-				
 
 				} else {
 					JOptionPane.showMessageDialog(null, "Cliente Inexistente");
@@ -475,6 +486,7 @@ public class Servicos extends JDialog {
 		}
 		// captura o indice da linha
 	}
+
 	private void Excluir() {
 		// System.out.println("teste d botão excluir");
 //fim do método excluircontato
@@ -507,103 +519,171 @@ public class Servicos extends JDialog {
 
 		}
 	}
+
 	/**
 	 * Impressão da OS
 	 */
 	private void imprimirOS() {
+
+		Font contentFont = FontFactory.getFont(FontFactory.HELVETICA, 12, BaseColor.BLACK);
+
 		// instanciar objeto para usar os métodos da biblioteca
 		Document document = new Document();
 		// documento pdf
 		if (txtEquipamento.getText().isEmpty()) {
+			JOptionPane.showMessageDialog(null, "Preencha o campo do equipamento");
+			txtEquipamento.requestFocus();
 
-            JOptionPane.showMessageDialog(null, "Preencha o campo do equipamento");
+		} else if (txtDefeito.getText().isEmpty()) {
+			JOptionPane.showMessageDialog(null, "Preencha o campo defeito");
+			txtDefeito.requestFocus();
 
-            txtEquipamento.requestFocus();
+		} else if (txtValor.getText().isEmpty()) {
+			JOptionPane.showMessageDialog(null, "Preencha o campo valor");
 
- 
+			txtValor.requestFocus();
 
-        } else if (txtDefeito.getText().isEmpty()) {
-
-            JOptionPane.showMessageDialog(null, "Preencha o campo defeito");
-
-            txtDefeito.requestFocus();
-
- 
-
-        } else if (txtValor.getText().isEmpty()) {
-
-            JOptionPane.showMessageDialog(null, "Preencha o campo valor");
-
-            txtValor.requestFocus();
-        } else {
-		try {
-			// criar um documento em branco (pdf) de nome clientes.pdf
-			PdfWriter.getInstance(document, new FileOutputStream("os.pdf"));
-			// abrir o documento (formatar e inserir o conteúdo)
-			document.open();
-			String readOS = "Select * from servicos where os = ?";
-			// conexão com o banco
+		} else {
 			try {
-				// abrir a conexão
-				con = dao.conectar();
-				// preparar a execução da query (instrução sql)
-				pst = con.prepareStatement(readOS);
-				pst.setString(1, txtOS.getText());
-				// executar a query
-				rs = pst.executeQuery();
-				// se existir a OS
-				if (rs.next()) {		
-					
-					Paragraph DoctorCell = new Paragraph ("DoctorCell: ");
-					DoctorCell.setAlignment(Element.ALIGN_RIGHT);
-					document.add(DoctorCell);
-						
-					
-					Paragraph os = new Paragraph ("OS: " + rs.getString(1));
-					os.setAlignment(Element.ALIGN_RIGHT);
-					document.add(os);
-						
-					Paragraph DataOS = new Paragraph ("DataOS: " + rs.getString(2));
-					DataOS.setAlignment(Element.ALIGN_LEFT);
-					document.add(DataOS);
 
-					Paragraph equipamento = new Paragraph ("Equipamento: " + rs.getString(3));
-					equipamento.setAlignment(Element.ALIGN_LEFT);
-					document.add(equipamento);
+				// criar um documento em branco (pdf) de nome clientes.pdf
+				PdfWriter.getInstance(document, new FileOutputStream("os.pdf"));
+				// abrir o documento (formatar e inserir o conteúdo)
+				document.open();
+				String readOS = "select * from servicos inner join clientes on servicos.id = clientes.id where os =?";
+				// conexão com o banco
+				try {
+					// abrir a conexão
+					con = dao.conectar();
+					// preparar a execução da query (instrução sql)
+					pst = con.prepareStatement(readOS);
+					pst.setString(1, txtOS.getText());
+					// executar a query
+					rs = pst.executeQuery();
+
+					// se existir a OS
+					if (rs.next()) {
+						// imprimir imagens
+
+
+												
+						
+						
+						PdfPTable table = new PdfPTable(14); // 2 colunas
+
+						PdfPCell col2 = new PdfPCell(new Paragraph("Equipamento: "));
+						PdfPCell col3 = new PdfPCell(new Paragraph("Defeito: "));
+						PdfPCell col4 = new PdfPCell(new Paragraph("Valor"));
+						PdfPCell col5 = new PdfPCell(new Paragraph("Nome: "));
+						PdfPCell col6 = new PdfPCell(new Paragraph("Fone: "));
+						PdfPCell col7 = new PdfPCell(new Paragraph("Email: "));
+						
+						Paragraph header = new Paragraph("Orçamento", FontFactory.getFont(FontFactory.HELVETICA, 20, Font.BOLD));
+						header.setAlignment(Element.ALIGN_CENTER);
+						document.add(header);
+						
+						
+						
+						Paragraph OS = new Paragraph("DoctorCell-MA");
+						OS.setAlignment(Element.ALIGN_CENTER);
+						document.add(OS);
+						Paragraph desc2 = new Paragraph("Assistência Técnica em tablets e celulares",
+								FontFactory.getFont(FontFactory.HELVETICA, 16, Font.BOLD));
+								desc2.setAlignment(Element.ALIGN_LEFT);
+								document.add(desc2);
+						
+						
+						Paragraph desc = new Paragraph("Endereço: Avenida Esperança, 2275 centro, São joão do Sóter-MA \nCelular(99) 9.8489-4627 \nEmail:doctorcell@gmail.com");
+
+						desc.setAlignment(Element.ALIGN_LEFT);
+						document.add(desc);
+						
+						
+						
+						
+						
+						Paragraph os14 = new Paragraph("Nome: " + rs.getString(8));
+						os14.setAlignment(Element.ALIGN_LEFT);
+						document.add(os14);
+						
+						Paragraph os16 = new Paragraph("Celular: " + rs.getString(17));
+						os16.setAlignment(Element.ALIGN_LEFT);
+						document.add(os16);
+						
+						Paragraph os17 = new Paragraph("Email: " + rs.getString(18));
+						os17.setAlignment(Element.ALIGN_LEFT);
+						document.add(os17);
+						
+						
+						Paragraph os19 = new Paragraph("\n____________________________________________");
+						os19.setAlignment(Element.ALIGN_LEFT);
+						document.add(os19);
+						
+
+
+
+						
+
+						Paragraph os11 = new Paragraph("Tipo de Equipamento: " + rs.getString(3));
+						os11.setAlignment(Element.ALIGN_LEFT);
+						document.add(os11);
+			
 					
-					Paragraph defeito = new Paragraph ("Defeito: " + rs.getString(4));
-					defeito.setAlignment(Element.ALIGN_LEFT);
-					document.add(defeito);
+						Paragraph os12 = new Paragraph("Defeito do Aparelho: " + rs.getString(4));
+						os12.setAlignment(Element.ALIGN_LEFT);
+						document.add(os12);
+
 					
-					Paragraph valor = new Paragraph ("Valor: " + rs.getString(5));
-					valor.setAlignment(Element.ALIGN_LEFT);
-					document.add(valor);
-					
-					//imprimir imagens
-					Image imagem = Image.getInstance(Servicos.class.getResource("/img/lala.png"));
-					imagem.scaleToFit(128,128);
-					imagem.setAbsolutePosition(30, 500);
-					document.add(imagem);					
-				}
-				// fechar a conexão com o banco
-				con.close();
+						
+						Paragraph os13 = new Paragraph("Valor Total: " + rs.getString(5));
+						os13.setAlignment(Element.ALIGN_LEFT);
+						document.add(os13);
+
+						
+						
+									
+						
+						Image logo = Image.getInstance(Servicos.class.getResource("/img/assis.png"));
+						logo.scaleToFit(200, 200);
+						logo.setAlignment(Element.ALIGN_CENTER);
+						document.add(logo);
+						document.add(Chunk.NEWLINE);
+						
+						
+						
+						
+						
+						
+						Paragraph data = new Paragraph("Data da emissão da OS: " + rs.getString(2));
+						data.setAlignment(Element.ALIGN_CENTER);
+						document.add(data);
+						
+						
+						
+											}
+					// fechar a conexão com o banco
+					con.close();
 				} catch (Exception e) {
 					System.out.println(e);
+
+				}
+			} catch (Exception e) {
+				System.out.println(e);
 			}
-		} catch (Exception e) {
-			System.out.println(e);
+			// fechar o documento (pronto para "impressão" (exibir o pdf))
+			document.close();
+			// Abrir o desktop do sistema operacional e usar o leitor padrão
+			// de pdf para exibir o documento
+			try {
+				Desktop.getDesktop().open(new File("os.pdf"));
+			} catch (Exception e) {
+				System.out.println(e);
+			}
 		}
-		// fechar o documento (pronto para "impressão" (exibir o pdf))
-		document.close();
-		// Abrir o desktop do sistema operacional e usar o leitor padrão
-		// de pdf para exibir o documento
-		try {
-			Desktop.getDesktop().open(new File("os.pdf"));
-		} catch (Exception e) {
-			System.out.println(e);
-		}
-	}
-	}
 
+	}
+	
+
+
+	 
 }
-
